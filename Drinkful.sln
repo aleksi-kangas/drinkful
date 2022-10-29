@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drinkful.Domain", "Drinkful
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drinkful.Infrastructure", "Drinkful.Infrastructure\Drinkful.Infrastructure.csproj", "{E6F2DF48-A9DE-4D30-B52C-E7F42EC89BDD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drinkful.API.UnitTests", "Drinkful.API.UnitTests\Drinkful.API.UnitTests.csproj", "{925D3A2B-278C-4398-8CEA-089D0A488B2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{E6F2DF48-A9DE-4D30-B52C-E7F42EC89BDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6F2DF48-A9DE-4D30-B52C-E7F42EC89BDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6F2DF48-A9DE-4D30-B52C-E7F42EC89BDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{925D3A2B-278C-4398-8CEA-089D0A488B2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{925D3A2B-278C-4398-8CEA-089D0A488B2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{925D3A2B-278C-4398-8CEA-089D0A488B2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{925D3A2B-278C-4398-8CEA-089D0A488B2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
