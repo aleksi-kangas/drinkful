@@ -1,6 +1,7 @@
 ﻿using Drinkful.Application.Common.Interfaces.Authentication;
 using Drinkful.Application.Common.Interfaces.Persistence;
 using Drinkful.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Drinkful.Application.Services.Authentication;
 
@@ -19,8 +20,9 @@ public class AuthenticationService : IAuthenticationService {
       throw new Exception("User with the given email does not exist.");
     }
 
-    // TODO Proper password hashing comparison
-    if (user.PasswordHash != password) {
+    var passwordHasher = new PasswordHasher<string>();
+    var result = passwordHasher.VerifyHashedPassword(user.Username, user.PasswordHash, password);
+    if (result == PasswordVerificationResult.Failed) {
       throw new Exception("Invalid password.");
     }
 
@@ -33,8 +35,13 @@ public class AuthenticationService : IAuthenticationService {
       throw new Exception("User with the given email already exists.");
     }
 
-    // TODO Proper password hashing
-    var user = new User { Username = username, Email = email, PasswordHash = password };
+    if (_userRepository.GetByUsername(username) is not null) {
+      throw new Exception("User with the given username already exists.");
+    }
+
+    var passwordHasher = new PasswordHasher<string>();
+    var passwordHash = passwordHasher.HashPassword(username, password);
+    var user = new User { Username = username, Email = email, PasswordHash = passwordHash };
     _userRepository.Add(user);
     var token = _jwtGenerator.GenerateToken(user);
     return new AuthenticationResult(user, token);
