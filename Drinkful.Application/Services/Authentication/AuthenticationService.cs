@@ -44,7 +44,7 @@ public class AuthenticationService : IAuthenticationService {
     var passwordHasher = new PasswordHasher<string>();
     var passwordHash = passwordHasher.HashPassword(username, password);
     var user = new User { Username = username, Email = email, PasswordHash = passwordHash };
-    _userRepository.Add(user);
+    _userRepository.Create(user);
     var token = _jwtGenerator.GenerateToken(user);
     return new AuthenticationResult(user, token);
   }

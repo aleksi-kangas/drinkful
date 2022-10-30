@@ -3,7 +3,7 @@
 namespace Drinkful.Application.Common.Interfaces.Persistence; 
 
 public interface IUserRepository {
-  void Add(User user);
+  void Create(User user);
   User? GetByEmail(string email);
   User? GetByUsername(string username);
 }

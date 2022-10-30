@@ -123,7 +123,7 @@ public class TestAuthenticationService {
     var authResult = service.Register(newUser.Username, newUser.Email, newUser.PasswordHash);
     // Assert
     authResult.IsError.Should().BeFalse();
-    mockUserRepository.Verify(x => x.Add(It.Is<User>(u =>
+    mockUserRepository.Verify(x => x.Create(It.Is<User>(u =>
       u.Username == newUser.Username && u.Email == newUser.Email)));
   }
 
