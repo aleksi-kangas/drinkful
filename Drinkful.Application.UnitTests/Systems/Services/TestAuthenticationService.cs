@@ -1,6 +1,7 @@
 ﻿using Drinkful.Application.Common.Interfaces.Authentication;
 using Drinkful.Application.Common.Interfaces.Persistence;
 using Drinkful.Application.Services.Authentication;
+using Drinkful.Domain.Common.Errors;
 using Drinkful.Domain.Entities;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
@@ -31,12 +32,13 @@ public class TestAuthenticationService {
     // Act
     var authResult = service.Login(user.Email, "password");
     // Assert
-    authResult.Token.Should().NotBeNullOrEmpty();
-    authResult.Token.Should().Be("token");
+    authResult.IsError.Should().BeFalse();
+    authResult.Value.Token.Should().NotBeNullOrEmpty();
+    authResult.Value.Token.Should().Be("token");
   }
 
   [Fact]
-  public void Login_WithoutExistingUser_ThrowsException() {
+  public void Login_WithoutExistingUser_ReturnsInvalidCredentialsError() {
     // Arrange
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
@@ -45,13 +47,14 @@ public class TestAuthenticationService {
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     var service = new AuthenticationService(mockJwtGenerator.Object, mockUserRepository.Object);
     // Act
-    var act = () => service.Login("user@example.com", "password");
+    var authResult = service.Login("user@example.com", "password");
     // Assert
-    act.Should().Throw<Exception>().WithMessage("User with the given email does not exist.");
+    authResult.IsError.Should().BeTrue();
+    authResult.FirstError.Should().Be(Errors.Authentication.InvalidCredentials);
   }
 
   [Fact]
-  public void Login_WithInvalidPassword_ThrowsException() {
+  public void Login_WithInvalidPassword_ReturnsInvalidCredentialsError() {
     // Arrange
     var user = new User {
       Id = Guid.NewGuid(),
@@ -66,9 +69,10 @@ public class TestAuthenticationService {
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     var service = new AuthenticationService(mockJwtGenerator.Object, mockUserRepository.Object);
     // Act
-    var act = () => service.Login("user@example.com", "invalid-password");
+    var authResult = service.Login("user@example.com", "invalid-password");
     // Assert
-    act.Should().Throw<Exception>().WithMessage("Invalid password.");
+    authResult.IsError.Should().BeTrue();
+    authResult.FirstError.Should().Be(Errors.Authentication.InvalidCredentials);
   }
 
   [Fact]
@@ -92,8 +96,9 @@ public class TestAuthenticationService {
     // Act
     var authResult = service.Register(newUser.Username, newUser.Email, "password");
     // Assert
-    authResult.Token.Should().NotBeNullOrEmpty();
-    authResult.Token.Should().Be("token");
+    authResult.IsError.Should().BeFalse();
+    authResult.Value.Token.Should().NotBeNullOrEmpty();
+    authResult.Value.Token.Should().Be("token");
   }
 
   [Fact]
@@ -117,12 +122,13 @@ public class TestAuthenticationService {
     // Act
     var authResult = service.Register(newUser.Username, newUser.Email, newUser.PasswordHash);
     // Assert
+    authResult.IsError.Should().BeFalse();
     mockUserRepository.Verify(x => x.Add(It.Is<User>(u =>
       u.Username == newUser.Username && u.Email == newUser.Email)));
   }
 
   [Fact]
-  public void Register_WithExistingEmail_ThrowsException() {
+  public void Register_WithExistingEmail_ReturnsDuplicateEmailError() {
     // Arrange
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
@@ -131,9 +137,10 @@ public class TestAuthenticationService {
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     var service = new AuthenticationService(mockJwtGenerator.Object, mockUserRepository.Object);
     // Act
-    var act = () => service.Register("username", "user@example.com", "password");
+    var authResult = service.Register("username", "user@example.com", "password");
     // Assert
-    act.Should().Throw<Exception>().WithMessage("User with the given email already exists.");
+    authResult.IsError.Should().BeTrue();
+    authResult.FirstError.Should().Be(Errors.Authentication.DuplicateEmail);
   }
 
   [Fact]
@@ -146,8 +153,9 @@ public class TestAuthenticationService {
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     var service = new AuthenticationService(mockJwtGenerator.Object, mockUserRepository.Object);
     // Act
-    var act = () => service.Register("username", "user@example.com", "password");
+    var authResult = service.Register("username", "user@example.com", "password");
     // Assert
-    act.Should().Throw<Exception>().WithMessage("User with the given username already exists.");
+    authResult.IsError.Should().BeTrue();
+    authResult.FirstError.Should().Be(Errors.Authentication.DuplicateUsername);
   }
 }

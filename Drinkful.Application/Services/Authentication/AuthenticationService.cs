@@ -1,6 +1,8 @@
 ﻿using Drinkful.Application.Common.Interfaces.Authentication;
 using Drinkful.Application.Common.Interfaces.Persistence;
+using Drinkful.Domain.Common.Errors;
 using Drinkful.Domain.Entities;
+using ErrorOr;
 using Microsoft.AspNetCore.Identity;
 
 namespace Drinkful.Application.Services.Authentication;
@@ -14,29 +16,29 @@ public class AuthenticationService : IAuthenticationService {
     _userRepository = userRepository;
   }
 
-  public AuthenticationResult Login(string email, string password) {
+  public ErrorOr<AuthenticationResult> Login(string email, string password) {
     var user = _userRepository.GetByEmail(email);
     if (user is null) {
-      throw new Exception("User with the given email does not exist.");
+      return Errors.Authentication.InvalidCredentials;
     }
 
     var passwordHasher = new PasswordHasher<string>();
     var result = passwordHasher.VerifyHashedPassword(user.Username, user.PasswordHash, password);
     if (result == PasswordVerificationResult.Failed) {
-      throw new Exception("Invalid password.");
+      return Errors.Authentication.InvalidCredentials;
     }
 
     var token = _jwtGenerator.GenerateToken(user);
     return new AuthenticationResult(user, token);
   }
 
-  public AuthenticationResult Register(string username, string email, string password) {
+  public ErrorOr<AuthenticationResult> Register(string username, string email, string password) {
     if (_userRepository.GetByEmail(email) is not null) {
-      throw new Exception("User with the given email already exists.");
+      return Errors.Authentication.DuplicateEmail;
     }
 
     if (_userRepository.GetByUsername(username) is not null) {
-      throw new Exception("User with the given username already exists.");
+      return Errors.Authentication.DuplicateUsername;
     }
 
     var passwordHasher = new PasswordHasher<string>();

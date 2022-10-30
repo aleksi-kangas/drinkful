@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Drinkful.API.Controllers;
 
-[ApiController]
 [Route("auth")]
-public class AuthenticationController : ControllerBase {
+public class AuthenticationController : ApiController {
   private readonly IAuthenticationService _authenticationService;
 
   public AuthenticationController(IAuthenticationService authenticationService) {
@@ -16,18 +15,21 @@ public class AuthenticationController : ControllerBase {
   [HttpPost("login")]
   public IActionResult Login(LoginRequest request) {
     var authResult = _authenticationService.Login(request.Email, request.Password);
-    var response = MapToResponse(authResult);
-    return Ok(response);
+    return authResult.Match(
+      onValue: result => Ok(MapToResponse(result)),
+      onError: Problem);
   }
 
   [HttpPost("register")]
   public IActionResult Register(RegisterRequest request) {
     var authResult =
       _authenticationService.Register(request.Username, request.Email, request.Password);
-    var response = MapToResponse(authResult);
-    return Ok(response);
+    return authResult.Match(
+      onValue: result => Ok(MapToResponse(result)),
+      onError: Problem);
   }
-  private AuthenticationResponse MapToResponse(AuthenticationResult authResult) {
+
+  private static AuthenticationResponse MapToResponse(AuthenticationResult authResult) {
     return new AuthenticationResponse(
       authResult.User.Id,
       authResult.User.Username,
