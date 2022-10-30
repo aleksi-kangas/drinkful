@@ -1,12 +1,15 @@
-﻿using Drinkful.Application.Common.Interfaces.Persistence;
+﻿using Drinkful.Application.Common.Interfaces.Authentication;
+using Drinkful.Application.Common.Interfaces.Persistence;
 using Drinkful.Domain.Entities;
 
 namespace Drinkful.Application.Services.Authentication;
 
 public class AuthenticationService : IAuthenticationService {
+  private readonly IJwtGenerator _jwtGenerator;
   private readonly IUserRepository _userRepository;
 
-  public AuthenticationService(IUserRepository userRepository) {
+  public AuthenticationService(IJwtGenerator jwtGenerator, IUserRepository userRepository) {
+    _jwtGenerator = jwtGenerator;
     _userRepository = userRepository;
   }
 
@@ -21,8 +24,8 @@ public class AuthenticationService : IAuthenticationService {
       throw new Exception("Invalid password.");
     }
 
-    // TODO JWT generation
-    return new AuthenticationResult(user, "token");
+    var token = _jwtGenerator.GenerateToken(user);
+    return new AuthenticationResult(user, token);
   }
 
   public AuthenticationResult Register(string username, string email, string password) {
@@ -32,7 +35,8 @@ public class AuthenticationService : IAuthenticationService {
 
     // TODO Proper password hashing
     var user = new User { Username = username, Email = email, PasswordHash = password };
-    // TODO JWT generation
-    return new AuthenticationResult(user, "token");
+    _userRepository.Add(user);
+    var token = _jwtGenerator.GenerateToken(user);
+    return new AuthenticationResult(user, token);
   }
 }
