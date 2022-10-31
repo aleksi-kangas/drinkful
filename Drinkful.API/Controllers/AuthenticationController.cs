@@ -1,29 +1,33 @@
-﻿using Drinkful.Application.Services.Authentication;
+﻿using Drinkful.Application.Authentication.Commands;
+using Drinkful.Application.Authentication.Common;
+using Drinkful.Application.Authentication.Queries;
 using Drinkful.Contracts.Authentication;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Drinkful.API.Controllers;
 
 [Route("auth")]
 public class AuthenticationController : ApiController {
-  private readonly IAuthenticationService _authenticationService;
+  private readonly ISender _sender;
 
-  public AuthenticationController(IAuthenticationService authenticationService) {
-    _authenticationService = authenticationService;
+  public AuthenticationController(ISender sender) {
+    _sender = sender;
   }
 
   [HttpPost("login")]
-  public IActionResult Login(LoginRequest request) {
-    var authResult = _authenticationService.Login(request.Email, request.Password);
+  public async Task<IActionResult> Login(LoginRequest request) {
+    var loginQuery = new LoginQuery(request.Email, request.Password);
+    var authResult = await _sender.Send(loginQuery);
     return authResult.Match(
       onValue: result => Ok(MapToResponse(result)),
       onError: Problem);
   }
 
   [HttpPost("register")]
-  public IActionResult Register(RegisterRequest request) {
-    var authResult =
-      _authenticationService.Register(request.Username, request.Email, request.Password);
+  public async Task<IActionResult> Register(RegisterRequest request) {
+    var registerCommand = new RegisterCommand(request.Username, request.Email, request.Password);
+    var authResult = await _sender.Send(registerCommand);
     return authResult.Match(
       onValue: result => Ok(MapToResponse(result)),
       onError: Problem);

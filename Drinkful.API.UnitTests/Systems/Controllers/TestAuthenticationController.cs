@@ -1,8 +1,12 @@
 ﻿using Drinkful.API.Controllers;
-using Drinkful.Application.Services.Authentication;
+using Drinkful.Application.Authentication.Commands;
+using Drinkful.Application.Authentication.Common;
+using Drinkful.Application.Authentication.Queries;
 using Drinkful.Contracts.Authentication;
 using Drinkful.Domain.Entities;
+using ErrorOr;
 using FluentAssertions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -10,16 +14,17 @@ namespace Drinkful.API.UnitTests.Systems.Controllers;
 
 public class TestAuthenticationController {
   [Fact]
-  public void Login_OnSuccessReturns200() {
+  public async void Login_OnSuccessReturns200() {
     // Arrange
-    var mockAuthenticationService = new Mock<IAuthenticationService>();
-    mockAuthenticationService
-      .Setup(x => x.Login("user@example.com", "password"))
-      .Returns(new AuthenticationResult(new User(), "token"));
-    var controller = new AuthenticationController(mockAuthenticationService.Object);
+    var mockSender = new Mock<ISender>();
+    var loginQuery = new LoginQuery("user@example.com", "password");
+    ErrorOr<AuthenticationResult> authResult = new AuthenticationResult(new User(), "token");
+    mockSender.Setup(x => x.Send(loginQuery, It.IsAny<CancellationToken>()))
+      .Returns(Task.FromResult(authResult));
+    var controller = new AuthenticationController(mockSender.Object);
     // Act
     var request = new LoginRequest("user@example.com", "password");
-    var result = controller.Login(request);
+    var result = await controller.Login(request);
     // Assert
     result.Should().BeOfType<OkObjectResult>();
     var okResult = (OkObjectResult)result;
@@ -27,16 +32,17 @@ public class TestAuthenticationController {
   }
 
   [Fact]
-  public void Register_OnSuccessReturns200() {
+  public async void Register_OnSuccessReturns200() {
     // Arrange
-    var mockAuthenticationService = new Mock<IAuthenticationService>();
-    mockAuthenticationService
-      .Setup(x => x.Register("username", "user@example.com", "password"))
-      .Returns(new AuthenticationResult(new User(), "token"));
-    var controller = new AuthenticationController(mockAuthenticationService.Object);
+    var mockSender = new Mock<ISender>();
+    var registerCommand = new RegisterCommand("username", "user@example.com", "password");
+    ErrorOr<AuthenticationResult> authResult = new AuthenticationResult(new User(), "token");
+    mockSender.Setup(x => x.Send(registerCommand, It.IsAny<CancellationToken>()))
+      .Returns(Task.FromResult(authResult));
+    var controller = new AuthenticationController(mockSender.Object);
     // Act
     var request = new RegisterRequest("username", "user@example.com", "password");
-    var result = controller.Register(request);
+    var result = await controller.Register(request);
     // Assert
     result.Should().BeOfType<OkObjectResult>();
     var okResult = (OkObjectResult)result;
