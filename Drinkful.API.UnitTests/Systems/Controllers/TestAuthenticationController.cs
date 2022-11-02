@@ -4,7 +4,6 @@ using Drinkful.Application.Authentication.Commands;
 using Drinkful.Application.Authentication.Common;
 using Drinkful.Application.Authentication.Queries;
 using Drinkful.Contracts.Authentication;
-using Drinkful.Domain.Common.Errors;
 using FluentAssertions;
 using MapsterMapper;
 using MediatR;
@@ -82,27 +81,6 @@ public class TestAuthenticationController {
   }
 
   [Fact]
-  public async void Login_OnInvalidCredentialsReturns400() {
-    // Arrange
-    var testUser = AuthenticationFixture.GetTestUser();
-    var loginQuery = new LoginQuery("user@example.com", "password");
-    _mapperMock.Setup(x => x.Map<LoginQuery>(It.IsAny<LoginRequest>()))
-      .Returns(loginQuery);
-    _mediatorMock.Setup(x => x.Send(loginQuery, It.IsAny<CancellationToken>()))
-      .ReturnsAsync(
-        AuthenticationFixture.GetAuthenticationResultFailure(Errors.Authentication
-          .InvalidCredentials));
-    var controller = new AuthenticationController(_mediatorMock.Object, _mapperMock.Object);
-    // Act
-    var request = new LoginRequest(testUser.Email, testUser.Password);
-    var result = await controller.Login(request);
-    // Assert
-    result.Should().BeOfType<ObjectResult>();
-    var objectResult = (ObjectResult)result;
-    objectResult.StatusCode.Should().Be(400);
-  }
-
-  [Fact]
   public async void Register_OnSuccessReturns200() {
     // Arrange
     var testUser = AuthenticationFixture.GetTestUser();
@@ -115,7 +93,9 @@ public class TestAuthenticationController {
       .Returns(AuthenticationFixture.GetAuthenticationResponseSuccess(testUser));
     var controller = new AuthenticationController(_mediatorMock.Object, _mapperMock.Object);
     // Act
-    var result = await controller.Register(new RegisterRequest(testUser.Username, testUser.Email, testUser.Password));
+    var result =
+      await controller.Register(new RegisterRequest(testUser.Username, testUser.Email,
+        testUser.Password));
     // Assert
     result.Should().BeOfType<OkObjectResult>();
     var okResult = (OkObjectResult)result;
