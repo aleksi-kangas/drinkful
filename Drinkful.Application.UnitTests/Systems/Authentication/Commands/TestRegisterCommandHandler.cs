@@ -7,7 +7,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 
-namespace Drinkful.Application.UnitTests.Systems.Commands;
+namespace Drinkful.Application.UnitTests.Systems.Authentication.Commands;
 
 public class TestRegisterCommandHandler {
   [Fact]

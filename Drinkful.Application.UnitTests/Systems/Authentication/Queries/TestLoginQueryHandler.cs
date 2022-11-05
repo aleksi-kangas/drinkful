@@ -7,7 +7,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 
-namespace Drinkful.Application.UnitTests.Systems.Queries;
+namespace Drinkful.Application.UnitTests.Systems.Authentication.Queries;
 
 public class TestLoginQueryHandler {
   [Fact]
