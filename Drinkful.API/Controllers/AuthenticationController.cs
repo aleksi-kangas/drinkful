@@ -3,11 +3,13 @@ using Drinkful.Application.Authentication.Queries;
 using Drinkful.Contracts.Authentication;
 using MapsterMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Drinkful.API.Controllers;
 
 [Route("auth")]
+[AllowAnonymous]
 public class AuthenticationController : ApiController {
   private readonly ISender _sender;
   private readonly IMapper _mapper;

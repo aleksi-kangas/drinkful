@@ -1,10 +1,12 @@
 ﻿using ErrorOr;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Drinkful.API.Controllers;
 
 [ApiController]
+[Authorize]
 public class ApiController : ControllerBase {
   protected IActionResult Problem(List<Error> errors) {
     if (errors.Count is 0) {
