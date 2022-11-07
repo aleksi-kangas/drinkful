@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using Drinkful.Application.Common.Interfaces.Authentication;
-using Drinkful.Domain.Entities;
+using Drinkful.Domain.User;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -19,7 +19,7 @@ public class JwtGenerator : IJwtGenerator {
     var claims = new[] {
       new Claim(JwtRegisteredClaimNames.Email, user.Email),
       new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-      new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
+      new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()!)
     };
     var signingCredentials = new SigningCredentials(
       new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),

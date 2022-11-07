@@ -2,7 +2,7 @@
 using Drinkful.Application.Common.Interfaces.Authentication;
 using Drinkful.Application.Common.Interfaces.Persistence;
 using Drinkful.Domain.Common.Errors;
-using Drinkful.Domain.Entities;
+using Drinkful.Domain.User;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Moq;
@@ -13,13 +13,10 @@ public class TestLoginQueryHandler {
   [Fact]
   public async void Login_WithValidCredentials_ReturnsToken() {
     // Arrange
-    var passwordHasher = new PasswordHasher<string>();
-    var user = new User {
-      Id = Guid.NewGuid(),
-      Username = "username",
-      Email = "user@example.com",
-      PasswordHash = passwordHasher.HashPassword("username", "password")
-    };
+    var user = User.Create(
+      "username", 
+      "user@example.com",
+      new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
       .Setup(x => x.GetByEmail(user.Email))
@@ -60,12 +57,10 @@ public class TestLoginQueryHandler {
   [Fact]
   public async void Login_WithInvalidPassword_ReturnsInvalidCredentialsError() {
     // Arrange
-    var user = new User {
-      Id = Guid.NewGuid(),
-      Username = "username",
-      Email = "user@example.com",
-      PasswordHash = new PasswordHasher<string>().HashPassword("username", "password")
-    };
+    var user = User.Create(
+      "username", 
+      "user@example.com",
+      new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
       .Setup(x => x.GetByEmail("user@example.com"))

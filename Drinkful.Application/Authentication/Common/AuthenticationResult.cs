@@ -1,4 +1,4 @@
-﻿using Drinkful.Domain.Entities;
+﻿using Drinkful.Domain.User;
 
 namespace Drinkful.Application.Authentication.Common; 
 

@@ -6,7 +6,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : notnull 
   protected Entity(TId id) {
     Id = id;
   }
-  
+
   public bool Equals(Entity<TId>? other) {
     return Equals((object?)other);
   }

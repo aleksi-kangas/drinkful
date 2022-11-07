@@ -2,7 +2,7 @@
 using Drinkful.Application.Common.Interfaces.Authentication;
 using Drinkful.Application.Common.Interfaces.Persistence;
 using Drinkful.Domain.Common.Errors;
-using Drinkful.Domain.Entities;
+using Drinkful.Domain.User;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Moq;
@@ -13,12 +13,10 @@ public class TestRegisterCommandHandler {
   [Fact]
   public async void Register_WithValidUserInformation_ReturnsToken() {
     // Arrange
-    var newUser = new User {
-      Id = Guid.NewGuid(),
-      Username = "username",
-      Email = "user@example.com",
-      PasswordHash = new PasswordHasher<string>().HashPassword("username", "password")
-    };
+    var newUser = User.Create(
+      "username", 
+      "user@example.com",
+      new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
       .Setup(x => x.GetByEmail(newUser.Email))
@@ -41,12 +39,10 @@ public class TestRegisterCommandHandler {
   [Fact]
   public async void Register_WithoutExistingUser_AddsUserToRepository() {
     // Arrange
-    var newUser = new User {
-      Id = Guid.NewGuid(),
-      Username = "username",
-      Email = "user@example.com",
-      PasswordHash = "password"
-    };
+    var newUser = User.Create(
+      "username", 
+      "user@example.com",
+      new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
       .Setup(x => x.GetByEmail(newUser.Email))
@@ -69,10 +65,14 @@ public class TestRegisterCommandHandler {
   [Fact]
   public async void Register_WithExistingEmail_ReturnsDuplicateEmailError() {
     // Arrange
+    var existingUser = User.Create(
+      "username", 
+      "user@example.com",
+      new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
       .Setup(x => x.GetByEmail("user@example.com"))
-      .Returns(new User());
+      .Returns(existingUser);
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     var handler = new RegisterCommandHandler(mockJwtGenerator.Object, mockUserRepository.Object);
     // Act
@@ -87,10 +87,14 @@ public class TestRegisterCommandHandler {
   [Fact]
   public async void Register_WithExistingUsername_ThrowsException() {
     // Arrange
+    var existingUser = User.Create(
+      "username", 
+      "user@example.com",
+      new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
       .Setup(x => x.GetByUsername("username"))
-      .Returns(new User());
+      .Returns(existingUser);
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     var handler = new RegisterCommandHandler(mockJwtGenerator.Object, mockUserRepository.Object);
     // Act

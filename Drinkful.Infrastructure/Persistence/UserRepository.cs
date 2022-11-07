@@ -1,5 +1,5 @@
 ﻿using Drinkful.Application.Common.Interfaces.Persistence;
-using Drinkful.Domain.Entities;
+using Drinkful.Domain.User;
 
 namespace Drinkful.Infrastructure.Persistence; 
 

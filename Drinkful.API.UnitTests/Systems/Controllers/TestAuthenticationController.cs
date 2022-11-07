@@ -24,7 +24,7 @@ public class TestAuthenticationController {
   [Fact]
   public async void Login_OnSuccessReturns200() {
     // Arrange
-    var testUser = AuthenticationFixture.GetTestUser();
+    var testUser = new AuthenticationFixture.TestUser("username", "user@example.com", "password");
     var loginQuery = new LoginQuery(testUser.Email, testUser.Password);
     _mapperMock.Setup(x => x.Map<LoginQuery>(It.IsAny<LoginRequest>()))
       .Returns(loginQuery);
@@ -45,7 +45,7 @@ public class TestAuthenticationController {
   [Fact]
   public async void Login_InvokesMediator() {
     // Arrange
-    var testUser = AuthenticationFixture.GetTestUser();
+    var testUser = new AuthenticationFixture.TestUser("username", "user@example.com", "password");
     _mapperMock.Setup(x => x.Map<LoginQuery>(It.IsAny<LoginRequest>()))
       .Returns(new LoginQuery(testUser.Email, testUser.Password));
     var controller = new AuthenticationController(_mediatorMock.Object, _mapperMock.Object);
@@ -59,7 +59,7 @@ public class TestAuthenticationController {
   [Fact]
   public async void Login_InvokesMapperForRequest() {
     // Arrange
-    var testUser = AuthenticationFixture.GetTestUser();
+    var testUser = new AuthenticationFixture.TestUser("username", "user@example.com", "password");
     var controller = new AuthenticationController(_mediatorMock.Object, _mapperMock.Object);
     // Act
     await controller.Login(new LoginRequest(testUser.Email, testUser.Password));
@@ -71,7 +71,7 @@ public class TestAuthenticationController {
   [Fact]
   public async void Login_InvokesMapperForResponse() {
     // Arrange
-    var testUser = AuthenticationFixture.GetTestUser();
+    var testUser = new AuthenticationFixture.TestUser("username", "user@example.com", "password");
     var controller = new AuthenticationController(_mediatorMock.Object, _mapperMock.Object);
     // Act
     await controller.Login(new LoginRequest(testUser.Email, testUser.Password));
@@ -83,7 +83,7 @@ public class TestAuthenticationController {
   [Fact]
   public async void Register_OnSuccessReturns200() {
     // Arrange
-    var testUser = AuthenticationFixture.GetTestUser();
+    var testUser = new AuthenticationFixture.TestUser("username", "user@example.com", "password");
     var registerCommand = new RegisterCommand(testUser.Username, testUser.Email, testUser.Password);
     _mapperMock.Setup(x => x.Map<RegisterCommand>(It.IsAny<RegisterRequest>()))
       .Returns(registerCommand);

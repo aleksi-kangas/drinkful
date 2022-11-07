@@ -2,7 +2,7 @@
 using Drinkful.Application.Common.Interfaces.Authentication;
 using Drinkful.Application.Common.Interfaces.Persistence;
 using Drinkful.Domain.Common.Errors;
-using Drinkful.Domain.Entities;
+using Drinkful.Domain.User;
 using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -32,7 +32,7 @@ public class RegisterCommandHandler :
 
     var passwordHasher = new PasswordHasher<string>();
     var passwordHash = passwordHasher.HashPassword(command.Username, command.Password);
-    var user = new User { Username = command.Username, Email = command.Email, PasswordHash = passwordHash };
+    var user = User.Create(command.Username, command.Email, passwordHash);
     _userRepository.Create(user);
     var token = _jwtGenerator.GenerateToken(user);
     return new AuthenticationResult(user, token);
