@@ -1,4 +1,7 @@
-﻿using Drinkful.Domain.Common.Models;
+﻿using Drinkful.Domain.Comment.ValueObjects;
+using Drinkful.Domain.Common.Models;
+using Drinkful.Domain.Drink.ValueObjects;
+using Drinkful.Domain.Like.ValueObjects;
 using Drinkful.Domain.User.ValueObjects;
 
 namespace Drinkful.Domain.User;
@@ -7,6 +10,12 @@ public class User : AggregateRoot<UserId> {
   public string Username { get; set; }
   public string Email { get; set; }
   public string PasswordHash { get; set; }
+  private readonly List<DrinkId> _drinkIds = new();
+  public IReadOnlyCollection<DrinkId> DrinkIds => _drinkIds.AsReadOnly();
+  private readonly List<CommentId> _commentIds = new();
+  public IReadOnlyList<CommentId> CommentIds => _commentIds.AsReadOnly();
+  private readonly List<LikeId> _likeIds = new();
+  public IReadOnlyList<LikeId> LikeIds => _likeIds.AsReadOnly();
 
   private User(UserId userId, string username, string email, string passwordHash) : base(userId) {
     Username = username;
