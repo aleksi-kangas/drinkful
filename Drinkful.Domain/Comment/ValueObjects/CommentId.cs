@@ -1,9 +1,8 @@
-﻿using Drinkful.Domain.Common;
-using Drinkful.Domain.Common.Models;
+﻿using Drinkful.Domain.Common.Models;
 
 namespace Drinkful.Domain.Comment.ValueObjects;
 
-public sealed class CommentId : ValueObject, ILikeableId {
+public sealed class CommentId : ValueObject {
   public Guid Value { get; }
   private CommentId(Guid value) => Value = value;
   public static CommentId CreateUnique() => new(Guid.NewGuid());
