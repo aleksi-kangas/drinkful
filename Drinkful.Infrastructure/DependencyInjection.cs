@@ -15,8 +15,9 @@ public static class DependencyInjection {
   public static IServiceCollection AddInfrastructure(
     this IServiceCollection services,
     ConfigurationManager configurationManager) {
-    services.AddAuth(configurationManager);
-    services.AddScoped<IUserRepository, UserRepository>();
+    services
+      .AddAuth(configurationManager)
+      .AddPersistence();
     return services;
   }
 
@@ -41,6 +42,12 @@ public static class DependencyInjection {
           ValidIssuer = jwtSettings.Issuer,
           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret))
         });
+    return services;
+  }
+
+  private static IServiceCollection AddPersistence(this IServiceCollection services) {
+    services.AddScoped<IDrinkRepository, DrinkRepository>();
+    services.AddScoped<IUserRepository, UserRepository>();
     return services;
   }
 }
