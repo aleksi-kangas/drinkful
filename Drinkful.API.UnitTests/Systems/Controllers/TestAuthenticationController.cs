@@ -40,7 +40,7 @@ public class TestAuthenticationController {
     var result = await _controller.Login(request);
     // Assert
     result.Should().BeOfType<OkObjectResult>();
-    var okResult = (OkObjectResult)result;
+    var okResult = (OkObjectResult) result;
     okResult.StatusCode.Should().Be(200);
   }
 
@@ -87,9 +87,9 @@ public class TestAuthenticationController {
     var result = await _controller.Login(new LoginRequest("user@example.com", "wrong-password"));
     // Assert
     result.Should().BeOfType<ObjectResult>();
-    var objectResult = (ObjectResult)result;
+    var objectResult = (ObjectResult) result;
     objectResult.Value.Should().BeOfType<ValidationProblemDetails>();
-    var validationProblemDetails = (ValidationProblemDetails)objectResult.Value!;
+    var validationProblemDetails = (ValidationProblemDetails) objectResult.Value!;
     validationProblemDetails.Errors.Should().HaveCount(1);
     validationProblemDetails.Errors[Errors.Authentication.InvalidCredentials.Code].First().Should()
       .Be(Errors.Authentication.InvalidCredentials.Description);
@@ -109,7 +109,7 @@ public class TestAuthenticationController {
     var result = await _controller.Register(new RegisterRequest("username", "email", "password"));
     // Assert
     result.Should().BeOfType<OkObjectResult>();
-    var okResult = (OkObjectResult)result;
+    var okResult = (OkObjectResult) result;
     okResult.StatusCode.Should().Be(200);
   }
 }

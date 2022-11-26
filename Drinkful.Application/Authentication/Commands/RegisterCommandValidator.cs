@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Drinkful.Application.Authentication.Commands; 
+namespace Drinkful.Application.Authentication.Commands;
 
 public class RegisterCommandValidator : AbstractValidator<RegisterCommand> {
   public RegisterCommandValidator() {

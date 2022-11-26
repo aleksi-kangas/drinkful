@@ -2,7 +2,7 @@
 using ErrorOr;
 using MediatR;
 
-namespace Drinkful.Application.Authentication.Commands; 
+namespace Drinkful.Application.Authentication.Commands;
 
 public record RegisterCommand(
   string Username,

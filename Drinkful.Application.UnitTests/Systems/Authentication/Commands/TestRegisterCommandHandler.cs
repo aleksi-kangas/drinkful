@@ -14,7 +14,7 @@ public class TestRegisterCommandHandler {
   public async void Register_WithValidUserInformation_ReturnsToken() {
     // Arrange
     var newUser = User.Create(
-      "username", 
+      "username",
       "user@example.com",
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
@@ -40,7 +40,7 @@ public class TestRegisterCommandHandler {
   public async void Register_WithoutExistingUser_AddsUserToRepository() {
     // Arrange
     var newUser = User.Create(
-      "username", 
+      "username",
       "user@example.com",
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
@@ -66,7 +66,7 @@ public class TestRegisterCommandHandler {
   public async void Register_WithExistingEmail_ReturnsDuplicateEmailError() {
     // Arrange
     var existingUser = User.Create(
-      "username", 
+      "username",
       "user@example.com",
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
@@ -88,7 +88,7 @@ public class TestRegisterCommandHandler {
   public async void Register_WithExistingUsername_ThrowsException() {
     // Arrange
     var existingUser = User.Create(
-      "username", 
+      "username",
       "user@example.com",
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();

@@ -2,7 +2,7 @@
 using ErrorOr;
 using MediatR;
 
-namespace Drinkful.Application.Drinks.Commands.CreateDrink; 
+namespace Drinkful.Application.Drinks.Commands.CreateDrink;
 
 public record CreateDrinkCommand(
   string Name,

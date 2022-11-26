@@ -47,10 +47,7 @@ public class DrinkfulProblemDetailsFactory : ProblemDetailsFactory {
 
     statusCode ??= 400;
     var problemDetails = new ValidationProblemDetails(modelStateDictionary) {
-      Status = statusCode,
-      Type = type,
-      Detail = detail,
-      Instance = instance,
+      Status = statusCode, Type = type, Detail = detail, Instance = instance,
     };
     if (title != null) {
       // For validation problem details, don't overwrite the default title with null.

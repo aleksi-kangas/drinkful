@@ -4,7 +4,7 @@ public abstract class ValueObject : IEquatable<ValueObject> {
   protected abstract IEnumerable<object> GetEqualityComponents();
 
   public bool Equals(ValueObject? other) {
-    return Equals((object?)other);
+    return Equals((object?) other);
   }
 
   public override bool Equals(object? obj) {
@@ -12,7 +12,7 @@ public abstract class ValueObject : IEquatable<ValueObject> {
       return false;
     }
 
-    var other = (ValueObject)obj;
+    var other = (ValueObject) obj;
     return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
   }
 

@@ -27,6 +27,6 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
     var errors = validationResult.Errors.ConvertAll(validationFailure =>
       Error.Validation(validationFailure.PropertyName, validationFailure.ErrorMessage));
 
-    return (dynamic)errors; // Safe due to the constraint on TResponse
+    return (dynamic) errors; // Safe due to the constraint on TResponse
   }
 }

@@ -2,7 +2,7 @@
 using Drinkful.API.Common.Mapping;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Drinkful.API; 
+namespace Drinkful.API;
 
 public static class DependencyInjection {
   public static IServiceCollection AddPresentation(this IServiceCollection services) {
@@ -10,5 +10,5 @@ public static class DependencyInjection {
     services.AddSingleton<ProblemDetailsFactory, DrinkfulProblemDetailsFactory>();
     services.AddMappings();
     return services;
-  } 
+  }
 }

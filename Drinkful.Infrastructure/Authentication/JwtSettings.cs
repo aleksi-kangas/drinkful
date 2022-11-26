@@ -1,4 +1,4 @@
-﻿namespace Drinkful.Infrastructure.Authentication; 
+﻿namespace Drinkful.Infrastructure.Authentication;
 
 public class JwtSettings {
   public const string SectionName = "JwtSettings";

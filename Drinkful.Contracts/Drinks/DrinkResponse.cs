@@ -1,4 +1,4 @@
-﻿namespace Drinkful.Contracts.Drinks; 
+﻿namespace Drinkful.Contracts.Drinks;
 
 public record DrinkResponse(
   string Id,

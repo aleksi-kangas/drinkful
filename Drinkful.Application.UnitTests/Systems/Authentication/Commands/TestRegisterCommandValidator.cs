@@ -5,7 +5,7 @@ namespace Drinkful.Application.UnitTests.Systems.Authentication.Commands;
 
 public class TestRegisterCommandValidator {
   private readonly RegisterCommandValidator _validator = new();
-  
+
   [Theory]
   [InlineData("", "user@example.com", "password")]
   [InlineData("", "", "")]
@@ -22,7 +22,7 @@ public class TestRegisterCommandValidator {
       .ShouldHaveValidationErrorFor(rc => rc.Username)
       .WithErrorCode("NotEmptyValidator");
   }
-  
+
   [Theory]
   [InlineData("username", "", "password")]
   [InlineData("", "", "")]
@@ -39,7 +39,7 @@ public class TestRegisterCommandValidator {
       .ShouldHaveValidationErrorFor(rc => rc.Email)
       .WithErrorCode("NotEmptyValidator");
   }
-  
+
   [Theory]
   [InlineData("username", "user@example.com", "")]
   [InlineData("", "", "")]
@@ -56,7 +56,7 @@ public class TestRegisterCommandValidator {
       .ShouldHaveValidationErrorFor(rc => rc.Password)
       .WithErrorCode("NotEmptyValidator");
   }
-  
+
   [Theory]
   [InlineData("username", "user@example.com", "password")]
   [InlineData("somebody", "somebody@gmail.com", "123456")]

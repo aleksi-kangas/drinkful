@@ -14,7 +14,7 @@ public class TestLoginQueryHandler {
   public async void Login_WithValidCredentials_ReturnsToken() {
     // Arrange
     var user = User.Create(
-      "username", 
+      "username",
       "user@example.com",
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
@@ -58,7 +58,7 @@ public class TestLoginQueryHandler {
   public async void Login_WithInvalidPassword_ReturnsInvalidCredentialsError() {
     // Arrange
     var user = User.Create(
-      "username", 
+      "username",
       "user@example.com",
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
