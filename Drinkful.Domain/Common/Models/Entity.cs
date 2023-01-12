@@ -3,6 +3,10 @@
 public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : notnull {
   public TId Id { get; }
 
+#pragma warning disable CS8618
+  protected Entity() { } // For EF-Core
+#pragma warning restore CS8618
+
   protected Entity(TId id) {
     Id = id;
   }

@@ -8,6 +8,7 @@ public sealed class UserId : ValueObject {
 
   public static UserId Create(string id) => new(Guid.Parse(id));
   public static UserId CreateUnique() => new(Guid.NewGuid());
+  public static UserId Create(Guid value) => new(value);
 
   protected override IEnumerable<object> GetEqualityComponents() {
     yield return Value;

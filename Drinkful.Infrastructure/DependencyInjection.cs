@@ -19,7 +19,7 @@ public static class DependencyInjection {
     ConfigurationManager configurationManager) {
     services
       .AddAuth(configurationManager)
-      .AddPersistence();
+      .AddPersistence(configurationManager);
     return services;
   }
 
@@ -47,8 +47,10 @@ public static class DependencyInjection {
     return services;
   }
 
-  private static IServiceCollection AddPersistence(this IServiceCollection services) {
-    services.AddDbContext<DrinkfulDbContext>(options => options.UseNpgsql());
+  private static IServiceCollection AddPersistence(this IServiceCollection services,
+    ConfigurationManager configurationManager) {
+    services.AddDbContext<DrinkfulDbContext>(options =>
+      options.UseNpgsql(configurationManager.GetConnectionString("DefaultConnection")));
     services.AddScoped<IDrinkRepository, DrinkRepository>();
     services.AddScoped<IUserRepository, UserRepository>();
     return services;

@@ -16,6 +16,10 @@ public class Drink : AggregateRoot<DrinkId> {
   private readonly List<CommentId> _commentIds = new();
   public IReadOnlyList<CommentId> CommentIds => _commentIds.AsReadOnly();
 
+#pragma warning disable CS8618
+  private Drink() { } // For EF-Core
+#pragma warning restore CS8618
+
   private Drink(DrinkId drinkId, string name, string summary, string description, string imageUrl,
     DateTime createdAt, DateTime updatedAt, UserId authorId) : base(drinkId) {
     Name = name;
