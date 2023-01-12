@@ -3,7 +3,9 @@ using Drinkful.Application.Common.Interfaces.Authentication;
 using Drinkful.Application.Common.Interfaces.Persistence;
 using Drinkful.Infrastructure.Authentication;
 using Drinkful.Infrastructure.Persistence;
+using Drinkful.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -46,6 +48,7 @@ public static class DependencyInjection {
   }
 
   private static IServiceCollection AddPersistence(this IServiceCollection services) {
+    services.AddDbContext<DrinkfulDbContext>(options => options.UseNpgsql());
     services.AddScoped<IDrinkRepository, DrinkRepository>();
     services.AddScoped<IUserRepository, UserRepository>();
     return services;

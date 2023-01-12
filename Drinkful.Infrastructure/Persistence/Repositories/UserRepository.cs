@@ -1,7 +1,7 @@
 ﻿using Drinkful.Application.Common.Interfaces.Persistence;
 using Drinkful.Domain.User;
 
-namespace Drinkful.Infrastructure.Persistence;
+namespace Drinkful.Infrastructure.Persistence.Repositories;
 
 public class UserRepository : IUserRepository {
   private static readonly List<User> Users = new();
