@@ -16,9 +16,7 @@ public class GetDrinkQueryHandler : IRequestHandler<GetDrinkQuery, ErrorOr<Drink
 
   public async Task<ErrorOr<Drink>> Handle(GetDrinkQuery request,
     CancellationToken cancellationToken) {
-    await Task.CompletedTask; // TODO
-
-    var drink = _drinkRepository.GetById(DrinkId.Create(request.Id));
+    var drink = await _drinkRepository.GetByIdAsync(DrinkId.Create(request.Id), false);
     if (drink is null) {
       return Errors.Drink.NotFound;
     }

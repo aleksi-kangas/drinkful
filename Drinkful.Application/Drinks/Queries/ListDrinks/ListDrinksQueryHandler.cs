@@ -13,8 +13,6 @@ public class ListDrinksQueryHandler : IRequestHandler<ListDrinksQuery, IEnumerab
 
   public async Task<IEnumerable<Drink>> Handle(ListDrinksQuery request,
     CancellationToken cancellationToken) {
-    await Task.CompletedTask; // TODO
-    var drinks = _drinkRepository.GetAll();
-    return drinks;
+    return await _drinkRepository.GetAllAsync();
   }
 }

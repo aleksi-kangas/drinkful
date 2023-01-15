@@ -1,26 +1,24 @@
 ﻿using Drinkful.Application.Common.Interfaces.Persistence;
 using Drinkful.Domain.Drink;
 using Drinkful.Domain.Drink.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace Drinkful.Infrastructure.Persistence.Repositories;
 
-public class DrinkRepository : IDrinkRepository {
-  private readonly DrinkfulDbContext _dbContext;
-
-  public DrinkRepository(DrinkfulDbContext dbContext) {
-    _dbContext = dbContext;
-  }
+public class DrinkRepository : RepositoryBase<Drink>, IDrinkRepository {
+  public DrinkRepository(DrinkfulDbContext dbContext) : base(dbContext) { }
 
   public void Create(Drink drink) {
-    _dbContext.Drinks.Add(drink);
-    _dbContext.SaveChanges();
+    Add(drink);
   }
 
-  public Drink? GetById(DrinkId drinkId) {
-    return _dbContext.Drinks.Find(drinkId);
+  public async Task<Drink?> GetByIdAsync(DrinkId drinkId, bool trackChanges) {
+    return await FindByCondition(d => d.Id == drinkId, false)
+      .Include(d => d.Comments)
+      .FirstOrDefaultAsync();
   }
-  
-  public IEnumerable<Drink> GetAll() {
-    return _dbContext.Drinks;
+
+  public async Task<IEnumerable<Drink>> GetAllAsync() {
+    return await FindAll(false).ToListAsync();
   }
 }

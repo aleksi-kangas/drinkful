@@ -3,10 +3,10 @@ using Drinkful.Domain.Drink.ValueObjects;
 
 namespace Drinkful.Application.Common.Interfaces.Persistence;
 
-public interface IDrinkRepository {
+public interface IDrinkRepository : IRepositoryBase<Drink> {
   void Create(Drink drink);
 
-  Drink? GetById(DrinkId drinkId);
+  Task<Drink?> GetByIdAsync(DrinkId drinkId, bool trackChanges);
 
-  IEnumerable<Drink> GetAll();
+  Task<IEnumerable<Drink>> GetAllAsync();
 }
