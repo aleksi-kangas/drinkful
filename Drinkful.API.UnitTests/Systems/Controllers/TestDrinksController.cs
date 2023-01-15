@@ -30,7 +30,7 @@ public class TestDrinksController {
     // TODO Update status code test, once proper CreatedAtAction is returned.
     // Arrange
     var command = new CreateDrinkCommand(_sampleDrink.Name, _sampleDrink.Summary, _sampleDrink.Description,
-      _sampleDrink.ImageUrl, _sampleDrink.AuthorId.ToString());
+      _sampleDrink.ImageUrl, _sampleDrink.AuthorId.Value.ToString());
     _mapperMock.Setup(x => x.Map<CreateDrinkCommand>(It.IsAny<CreateDrinkRequest>()))
       .Returns(command);
     _mediatorMock.Setup(x => x.Send(command, It.IsAny<CancellationToken>()))
@@ -39,7 +39,7 @@ public class TestDrinksController {
       .Returns(new DrinkResponse(_sampleDrink.Id.Value.ToString(), _sampleDrink.Name, _sampleDrink.Summary,
         _sampleDrink.Description, _sampleDrink.ImageUrl, _sampleDrink.CreatedAt, _sampleDrink.UpdatedAt,
         _sampleDrink.AuthorId.Value.ToString(),
-        _sampleDrink.CommentIds.Select(x => x.Value.ToString()).ToList()));
+        new List<DrinkCommentResponse>()));
     // Act
     var request = new CreateDrinkRequest("name", "summary", "description", "image-url", "author-id");
     var result = await _controller.CreateDrink(request);

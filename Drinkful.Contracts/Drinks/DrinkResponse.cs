@@ -9,4 +9,11 @@ public record DrinkResponse(
   DateTime CreatedAt,
   DateTime UpdatedAt,
   string AuthorId,
-  List<string> CommentIds);
+  List<DrinkCommentResponse> Comments);
+
+public record DrinkCommentResponse(
+  string Id,
+  string Content,
+  string AuthorId,
+  DateTime CreatedAt,
+  DateTime UpdatedAt);
