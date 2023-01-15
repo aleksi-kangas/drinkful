@@ -2,8 +2,8 @@
 
 namespace Drinkful.Application.Common.Interfaces.Persistence;
 
-public interface IUserRepository {
+public interface IUserRepository : IRepositoryBase<User> {
   void Create(User user);
-  User? GetByEmail(string email);
-  User? GetByUsername(string username);
+  Task<User?> GetByEmail(string email, bool trackChanges);
+  Task<User?> GetByUsername(string username, bool trackChanges);
 }

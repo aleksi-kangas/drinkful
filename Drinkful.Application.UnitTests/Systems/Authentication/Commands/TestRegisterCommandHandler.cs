@@ -19,8 +19,8 @@ public class TestRegisterCommandHandler {
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
-      .Setup(x => x.GetByEmail(newUser.Email))
-      .Returns(null as User);
+      .Setup(x => x.GetByEmail(newUser.Email, false))
+      .Returns(Task.FromResult(null as User));
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     mockJwtGenerator
       .Setup(x => x.GenerateToken(It.IsAny<User>()))
@@ -45,8 +45,8 @@ public class TestRegisterCommandHandler {
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
-      .Setup(x => x.GetByEmail(newUser.Email))
-      .Returns(null as User);
+      .Setup(x => x.GetByEmail(newUser.Email, false))
+      .Returns(Task.FromResult(null as User));
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     mockJwtGenerator
       .Setup(x => x.GenerateToken(newUser))
@@ -71,8 +71,8 @@ public class TestRegisterCommandHandler {
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
-      .Setup(x => x.GetByEmail("user@example.com"))
-      .Returns(existingUser);
+      .Setup(x => x.GetByEmail("user@example.com", false))
+      .Returns(Task.FromResult(existingUser)!);
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     var handler = new RegisterCommandHandler(mockJwtGenerator.Object, mockUserRepository.Object);
     // Act
@@ -93,8 +93,8 @@ public class TestRegisterCommandHandler {
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
-      .Setup(x => x.GetByUsername("username"))
-      .Returns(existingUser);
+      .Setup(x => x.GetByUsername("username", false))
+      .Returns(Task.FromResult(existingUser)!);
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     var handler = new RegisterCommandHandler(mockJwtGenerator.Object, mockUserRepository.Object);
     // Act

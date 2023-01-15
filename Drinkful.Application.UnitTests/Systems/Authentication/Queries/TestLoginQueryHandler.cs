@@ -19,8 +19,8 @@ public class TestLoginQueryHandler {
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
-      .Setup(x => x.GetByEmail(user.Email))
-      .Returns(user);
+      .Setup(x => x.GetByEmail(user.Email, false))
+      .Returns(Task.FromResult(user)!);
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     mockJwtGenerator
       .Setup(x => x.GenerateToken(user))
@@ -41,8 +41,8 @@ public class TestLoginQueryHandler {
     // Arrange
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
-      .Setup(x => x.GetByEmail("user@example.com"))
-      .Returns(null as User);
+      .Setup(x => x.GetByEmail("user@example.com", false))
+      .Returns(Task.FromResult(null as User));
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     var handler = new LoginQueryHandler(mockJwtGenerator.Object, mockUserRepository.Object);
     // Act
@@ -63,8 +63,8 @@ public class TestLoginQueryHandler {
       new PasswordHasher<string>().HashPassword("username", "password"));
     var mockUserRepository = new Mock<IUserRepository>();
     mockUserRepository
-      .Setup(x => x.GetByEmail("user@example.com"))
-      .Returns(user);
+      .Setup(x => x.GetByEmail("user@example.com", false))
+      .Returns(Task.FromResult(user)!);
     var mockJwtGenerator = new Mock<IJwtGenerator>();
     var handler = new LoginQueryHandler(mockJwtGenerator.Object, mockUserRepository.Object);
     // Act

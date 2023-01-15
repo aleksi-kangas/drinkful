@@ -10,6 +10,10 @@ public class User : AggregateRoot<UserId> {
   public string PasswordHash { get; set; }
   private readonly List<DrinkId> _drinkIds = new();
   public IReadOnlyCollection<DrinkId> DrinkIds => _drinkIds.AsReadOnly();
+  
+#pragma warning disable CS8618
+  private User() {}
+#pragma warning restore CS8618
 
   private User(UserId userId, string username, string email, string passwordHash) : base(userId) {
     Username = username;

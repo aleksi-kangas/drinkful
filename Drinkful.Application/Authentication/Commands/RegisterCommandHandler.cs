@@ -22,11 +22,11 @@ public class RegisterCommandHandler :
   public async Task<ErrorOr<AuthenticationResult>> Handle(
     RegisterCommand command,
     CancellationToken cancellationToken) {
-    if (_userRepository.GetByEmail(command.Email) is not null) {
+    if (await _userRepository.GetByEmail(command.Email, false) is not null) {
       return Errors.Authentication.DuplicateEmail;
     }
 
-    if (_userRepository.GetByUsername(command.Username) is not null) {
+    if (await _userRepository.GetByUsername(command.Username, false) is not null) {
       return Errors.Authentication.DuplicateUsername;
     }
 
