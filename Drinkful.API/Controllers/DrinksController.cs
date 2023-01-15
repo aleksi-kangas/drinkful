@@ -1,4 +1,5 @@
 ﻿using Drinkful.Application.Drinks.Commands.CreateDrink;
+using Drinkful.Application.Drinks.Queries.GetDrink;
 using Drinkful.Contracts.Drinks;
 using MapsterMapper;
 using MediatR;
@@ -16,11 +17,19 @@ public class DrinksController : ApiController {
     _sender = sender;
   }
 
+  [HttpGet("{id:guid}")]
+  public async Task<IActionResult> GetDrinkAsync(Guid id) {
+    var query = new GetDrinkQuery(id);
+    var getDrinkResult = await _sender.Send(query);
+    return getDrinkResult.Match(
+      onValue: drink => Ok(_mapper.Map<DrinkResponse>(drink)),
+      onError: Problem);
+  }
+
   [HttpPost]
   public async Task<IActionResult> CreateDrink(CreateDrinkRequest request) {
     var command = _mapper.Map<CreateDrinkCommand>(request);
     var createDrinkResult = await _sender.Send(command);
-    // TODO Implement GetDrink endpoint and use it here...
     return createDrinkResult.Match(
       onValue: drink => Ok(_mapper.Map<DrinkResponse>(drink)),
       onError: Problem);
