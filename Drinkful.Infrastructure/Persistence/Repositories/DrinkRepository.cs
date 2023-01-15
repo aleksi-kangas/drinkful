@@ -19,4 +19,8 @@ public class DrinkRepository : IDrinkRepository {
   public Drink? GetById(DrinkId drinkId) {
     return _dbContext.Drinks.Find(drinkId);
   }
+  
+  public IEnumerable<Drink> GetAll() {
+    return _dbContext.Drinks;
+  }
 }

@@ -11,6 +11,8 @@ public class DrinkConfigurations : IEntityTypeConfiguration<Drink> {
   public void Configure(EntityTypeBuilder<Drink> builder) {
     ConfigureDrinksTable(builder);
     ConfigureDrinkCommentsTable(builder);
+    
+    InitialData(builder);
   }
 
   private void ConfigureDrinksTable(EntityTypeBuilder<Drink> builder) {
@@ -46,5 +48,20 @@ public class DrinkConfigurations : IEntityTypeConfiguration<Drink> {
 
     builder.Metadata.FindNavigation(nameof(Drink.Comments))!
       .SetPropertyAccessMode(PropertyAccessMode.Field);
+  }
+
+  private void InitialData(EntityTypeBuilder<Drink> builder) {
+    builder.HasData(Drink.Create(
+      "Cappuccino",
+      "Coffee drink",
+      "A cappuccino is an espresso-based coffee drink that originated in Austria and was later popularized in Italy and is prepared with steamed milk foam. Variations of the drink involve the use of cream instead of milk, using non-dairy milk substitutes and flavoring with cinnamon or chocolate powder.",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Cappuccino_at_Sightglass_Coffee.jpg/1024px-Cappuccino_at_Sightglass_Coffee.jpg",
+      UserId.CreateUnique()));
+    builder.HasData(Drink.Create(
+      "Moscow mule",
+      "Cocktail",
+      "A Moscow mule is a cocktail made with vodka, ginger beer and lime juice, garnished with a slice or wedge of lime and a sprig of mint. The drink is a type of buck and is sometimes called a vodka buck. The Moscow mule is popularly served in a copper mug, which takes on the cold temperature of the liquid.",
+      "https://upload.wikimedia.org/wikipedia/commons/8/89/Cocktail_Moscow_Mule_im_Kupferbecher_mit_Minze.jpg",
+      UserId.CreateUnique()));
   }
 }
